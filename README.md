@@ -85,4 +85,3 @@ Mọi PR và issue đều hoan nghênh. Khi đóng góp vui lòng:
 - Nếu cập nhật collection, export file `postman/collection.json` mới và cập nhật changelog
 
 ## License
-Tùy chọn — thêm license nếu cần (ví dụ: MIT).
