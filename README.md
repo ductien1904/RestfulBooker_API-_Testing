@@ -1,6 +1,8 @@
 # RestfulBooker API Testing
 
-Một bộ test tự động tập trung vào việc kiểm thử API cho RestfulBooker (demo API), thiết kế chủ yếu để chạy bằng Postman. Repository này chứa Postman collection, environment mẫu và hướng dẫn để chạy test thủ công hoặc tự động (Newman/CI).
+RestfulBooker là một API demo công khai để quản lý đặt phòng (bookings), được thiết kế phục vụ mục đích học tập và thử nghiệm. Nó hỗ trợ các thao tác CRUD trên booking và có các endpoint xác thực để minh họa kịch bản thực tế. Vì là API demo công khai (ví dụ: https://restful-booker.herokuapp.com), nó rất phù hợp để kiểm thử tự động bằng Postman/Newman và làm ví dụ cho assertions, setup/teardown dữ liệu.
+
+Một bộ test tự động tập trung vào việc kiểm thử API cho RestfulBooker (demo API), thiết kế chủ yếu để chạy bằng Postman. Repository này chứa Postman collection, [...]
 
 ## Mô tả ngắn
 RestfulBooker là một API demo dùng để quản lý booking. Mục tiêu của repository này là:
