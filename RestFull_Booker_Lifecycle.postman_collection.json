@@ -1,0 +1,257 @@
+{
+  "info": {
+    "_postman_id": "b2a22c8f-fb68-464b-b36e-0fd1d7f6dab0",
+    "name": "RestFull_Booker_Lifecycle",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53197319",
+    "_collection_link": "https://go.postman.co/collection/53197319-b2a22c8f-fb68-464b-b36e-0fd1d7f6dab0?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "POST /booking",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "var res = pm.response.json();",
+              "pm.collectionVariables.set(\"lifecycleBookingId\", res.bookingid);",
+              "pm.environment.set(\"bookingId\", res.bookingid);",
+              "",
+              "pm.test(\"Tạo booking mới thành công\", function() {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "pm.test(\"additionalneeds = Breakfast (dịch vụ đăng ký)\", function() {",
+              "    pm.expect(res.booking.additionalneeds).to.eql(\"Breakfast\");",
+              "});",
+              "pm.test(\"depositpaid = false (chưa thanh toán)\", function() {",
+              "    pm.expect(res.booking.depositpaid).to.eql(false);",
+              "});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"firstname\": \"John\",\n  \"lastname\": \"Doe\",\n  \"totalprice\": 100,\n  \"depositpaid\": false,\n  \"bookingdates\": {\n    \"checkin\": \"2025-01-01\",\n    \"checkout\": \"2025-01-05\"\n  },\n  \"additionalneeds\": \"Breakfast\"\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/booking",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PATCH → In Use",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var res = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Status 200 – update In Use thành công\", function() {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "pm.test(\"✅ depositpaid = true (khách đã check-in, đã thanh toán)\", function() {\r",
+              "    pm.expect(res.depositpaid).to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Basic YWRtaW46cGFzc3dvcmQxMjM="
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"depositpaid\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /booking/:id",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var res = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Status 200\", function() {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "pm.test(\"✅ Xác nhận trạng thái In Use trên server\", function() {\r",
+              "    pm.expect(res.depositpaid).to.eql(true);\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "PATCH → Done",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var res = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Status 200 – update Done thành công\", function() {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "pm.test(\"✅ additionalneeds cập nhật COMPLETED\", function() {\r",
+              "    pm.expect(res.additionalneeds).to.include(\"COMPLETED\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Basic YWRtaW46cGFzc3dvcmQxMjM="
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"bookingdates\": {\r\n    \"checkin\": \"2025-01-01\",\r\n    \"checkout\": \"2025-01-05\"\r\n  },\r\n  \"additionalneeds\": \"Breakfast - COMPLETED\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "GET /booking/:id(verify Done)",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var res = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Status 200 – booking vẫn tồn tại\", function() {\r",
+              "    pm.response.to.have.status(200);\r",
+              "});\r",
+              "pm.test(\"✅ Xác nhận trạng thái Done trên server\", function() {\r",
+              "    pm.expect(res.additionalneeds).to.include(\"COMPLETED\");\r",
+              "});\r",
+              "pm.test(\"✅ Xác nhận depositpaid vẫn đúng\", function() {\r",
+              "    pm.expect(res.depositpaid).to.eql(true);\r",
+              "});\r",
+              "pm.test(\"✅ Xác nhận checkin không bị thay đổi\", function() {\r",
+              "    pm.expect(res.bookingdates.checkin).to.eql(\"2025-01-01\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/booking/{{bookingId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "booking",
+            "{{bookingId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "lifecycleBookingId",
+      "value": ""
+    }
+  ]
+}
